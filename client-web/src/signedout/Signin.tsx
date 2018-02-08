@@ -1,19 +1,47 @@
 import * as React from 'react';
 import { connect } from 'redux-zero/react';
 import { actions } from '../logic';
-import { Button } from 'antd';
+import { Card, Form, Input, Icon, Button } from 'antd';
 
 interface Props {
 	starting: boolean;
+	email: string;
+	password: string;
+
+	changeLoginDetail: { (payload: { key: string; value: string }): void };
 	signin: { (): void };
 }
 
 const Signin = (props: Props) => (
-	<div>
-		<h1>Signin</h1>
-		<Button type="primary" onClick={props.signin}>Sign In</Button>
+	<div style={{ width: 300, margin: 'auto', paddingBottom: 200 }} >
+		<Card title="Diskette" bordered={false} style={{}}>
+			<Form layout="vertical">
+				<Form.Item>
+					<Input
+						autoFocus={props.email === ''}
+						value={props.email}
+						onChange={evt => props.changeLoginDetail({ key: 'email', value: evt.target.value })}
+						prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="Email"
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Input
+						type="password"
+						autoFocus={props.email.length > 0 && props.password === ''}
+						value={props.password}
+						onChange={evt => props.changeLoginDetail({ key: 'password', value: evt.target.value })}
+						prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+						placeholder="Password"
+					/>
+				</Form.Item>
+				<Form.Item>
+					<Button type="primary" style={{ width: '100%' }} onClick={props.signin}>Sign In</Button>
+				</Form.Item>
+			</Form>
+		</Card>
 	</div>
 );
 
-const mapToProps = ({ starting }: any) => ({ starting });
+const mapToProps = ({ starting, loginPage }: any) => ({ starting, ...loginPage });
 export default connect(mapToProps, actions)(Signin);
