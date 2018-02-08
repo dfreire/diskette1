@@ -46,7 +46,6 @@ class App extends React.Component<Props, State> {
 	}
 
 	_renderSignedOut() {
-		console.log('_renderSignedOut');
 		return (
 			<AntLayout style={{ height: '100%' }}>
 				<Switch>
@@ -58,7 +57,6 @@ class App extends React.Component<Props, State> {
 	}
 
 	_renderSignedIn() {
-		console.log('_renderSignedIn');
 		return (
 			<AntLayout style={{ height: '100%' }}>
 				{this._renderSideBar()}
@@ -85,24 +83,99 @@ class App extends React.Component<Props, State> {
 				collapsible={true}
 				collapsed={this.state.collapsedSideBar}
 				style={{ height: '100%' }}
-				width={250}
+				width={240}
 			>
 				<Link to="/">
 					<div style={styles.logoContainer[sidebarState]}>
-						<img style={styles.logoImg[sidebarState]} src="/diskette.png" alt="" />
+						<img
+							style={styles.logoImg[sidebarState]}
+							src={sidebarState === 'expanded' ? '/diskette.png' : '/d-iskette.png'}
+							alt=""
+						/>
 					</div>
 				</Link>
 				<Menu
 					theme="dark"
 					mode="inline"
 					selectedKeys={[this.props.pathname.split('/')[1]]}
+					defaultOpenKeys={['sub1', 'sub2']}
 				>
-					<Menu.Item key="pages">
-						<Link to="/pages/">
-							<span style={styles.navIcon[sidebarState]}><Icon type="file" /></span>
-							<span style={styles.navText[sidebarState]}>Pages</span>
-						</Link>
-					</Menu.Item>
+					<Menu.SubMenu
+						key="sub1"
+						title={<span><Icon type="laptop" /><span>Frontend</span></span>}
+					>
+						<Menu.Item key="frontendsettings">
+							<Link to="/frontendsettings/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="setting" /></span>
+								<span style={styles.navText[sidebarState]}>Settings</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="pages">
+							<Link to="/pages/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="file" /></span>
+								<span style={styles.navText[sidebarState]}>Pages</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="models">
+							<Link to="/models/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="file-text" /></span>
+								<span style={styles.navText[sidebarState]}>Models</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="files">
+							<Link to="/files/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="hdd" /></span>
+								<span style={styles.navText[sidebarState]}>Files</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="collections">
+							<Link to="/collections/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="table" /></span>
+								<span style={styles.navText[sidebarState]}>Collections</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="frontendusers">
+							<Link to="/frontendusers/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="team" /></span>
+								<span style={styles.navText[sidebarState]}>Users</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="frontendemails">
+							<Link to="/frontendemails/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="mail" /></span>
+								<span style={styles.navText[sidebarState]}>Emails</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="translations">
+							<Link to="/translations/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="customer-service" /></span>
+								<span style={styles.navText[sidebarState]}>Translations</span>
+							</Link>
+						</Menu.Item>
+					</Menu.SubMenu>
+					<Menu.SubMenu
+						key="sub2"
+						title={<span><Icon type="desktop" /><span>Backend</span></span>}
+					>
+						<Menu.Item key="backendsettings">
+							<Link to="/backendsettings/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="setting" /></span>
+								<span style={styles.navText[sidebarState]}>Settings</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="backendusers">
+							<Link to="/backendusers/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="team" /></span>
+								<span style={styles.navText[sidebarState]}>Users</span>
+							</Link>
+						</Menu.Item>
+						<Menu.Item key="backendemails">
+							<Link to="/backendemails/">
+								<span style={styles.navIcon[sidebarState]}><Icon type="mail" /></span>
+								<span style={styles.navText[sidebarState]}>Emails</span>
+							</Link>
+						</Menu.Item>
+					</Menu.SubMenu>
 				</Menu>
 			</Sider>
 		);
@@ -165,26 +238,27 @@ class App extends React.Component<Props, State> {
 const styles = {
 	logoContainer: {
 		expanded: {
-			margin: 20,
-			marginRight: 25,
+			backgroundColor: '#072449',
+			padding: 20,
 		},
 		collapsed: {
-			margin: 10,
-			marginTop: 20,
-			marginRight: 12,
+			backgroundColor: '#072449',
+			padding: 20,
 		},
 	},
 	logoImg: {
 		expanded: {
-			width: '100%',
+			// width: '100%',
+			height: 40,
 		},
 		collapsed: {
-			width: '100%',
+			// width: '100%',
+			height: 40,
 		},
 	},
 	navIcon: {
 		expanded: {
-			display: 'none',
+			// display: 'none',
 		},
 		collapsed: {
 			textAlign: 'center',
