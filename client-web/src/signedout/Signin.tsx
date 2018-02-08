@@ -7,6 +7,7 @@ interface Props {
 	starting: boolean;
 	email: string;
 	password: string;
+	errors: { [key: string]: string };
 
 	changeSigninDetail: { (payload: { key: string; value: string }): void };
 	signin: { (): void };
@@ -16,7 +17,10 @@ const Signin = (props: Props) => (
 	<div style={{ width: 300, margin: 'auto', paddingBottom: 200 }} >
 		<Card title="Diskette" bordered={false} style={{}}>
 			<Form layout="vertical">
-				<Form.Item>
+				<Form.Item
+					validateStatus={props.errors.email ? 'error' : undefined}
+					help={props.errors.email}
+				>
 					<Input
 						autoFocus={props.email === ''}
 						value={props.email}
@@ -25,7 +29,10 @@ const Signin = (props: Props) => (
 						placeholder="Email"
 					/>
 				</Form.Item>
-				<Form.Item>
+				<Form.Item
+					validateStatus={props.errors.password ? 'error' : undefined}
+					help={props.errors.password}
+				>
 					<Input
 						type="password"
 						autoFocus={props.email.length > 0 && props.password === ''}

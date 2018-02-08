@@ -12,6 +12,7 @@ interface State {
 	signinPage: {
 		email: string;
 		password: string;
+		errors: { [key: string]: string };
 	};
 }
 
@@ -25,6 +26,7 @@ const INITIAL_STATE: State = {
 	signinPage: {
 		email: '',
 		password: '',
+		errors: {},
 	},
 };
 
@@ -42,15 +44,33 @@ const actions = ({ getState, setState }: StoreSignature) => {
 		});
 
 		const email = await localStorage.getItem('signinPage.email');
-		const signinPage = { ..._state.signinPage, email: email || '' };
-
-		setState((state) => ({ ...state, signinPage, starting: false }));
+		
+		setState((state) => {
+			const signinPage = { ...state.signinPage, email: email || '' };
+			return { ...state, signinPage, starting: false };
+		});
 	}
 
 	async function signin(_state: State) {
-		localStorage.setItem('signinPage.email', _state.signinPage.email);
+		const errors = {} as { [key: string]: string };
+		if (_state.signinPage.email == null || _state.signinPage.email.trim().length === 0) {
+			errors.email = 'Required!';
+		}
+		
+		if (_state.signinPage.password == null || _state.signinPage.password.trim().length === 0) {
+			errors.password = 'Required!';
+		}
 
-		setState((state) => ({ ...state, currentUser: { id: '123', email: state.signinPage.email } }));
+		if (errors.email || errors.password) {
+			setState((state) => {
+				const signinPage = { ...state.signinPage, errors };
+				return { ...state, signinPage, starting: false };
+			});
+
+		} else {
+			localStorage.setItem('signinPage.email', _state.signinPage.email);
+			setState((state) => ({ ...state, currentUser: { id: '123', email: state.signinPage.email } }));
+		}
 	}
 
 	async function signout() {
