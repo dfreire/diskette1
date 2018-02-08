@@ -9,7 +9,7 @@ interface State {
 	starting: boolean;
 	pathname: string;
 	currentUser: User;
-	loginPage: {
+	signinPage: {
 		email: string;
 		password: string;
 	};
@@ -22,7 +22,7 @@ const INITIAL_STATE: State = {
 		id: '',
 		email: '',
 	},
-	loginPage: {
+	signinPage: {
 		email: '',
 		password: '',
 	},
@@ -41,30 +41,30 @@ const actions = ({ getState, setState }: StoreSignature) => {
 			setState((state) => ({ ...state, pathname: location.pathname }));
 		});
 
-		const email = await localStorage.getItem('loginPage.email');
-		const loginPage = { ..._state.loginPage, email: email || '' };
+		const email = await localStorage.getItem('signinPage.email');
+		const signinPage = { ..._state.signinPage, email: email || '' };
 
-		setState((state) => ({ ...state, loginPage, starting: false }));
+		setState((state) => ({ ...state, signinPage, starting: false }));
 	}
 
 	async function signin(_state: State) {
-		localStorage.setItem('loginPage.email', _state.loginPage.email);
+		localStorage.setItem('signinPage.email', _state.signinPage.email);
 
-		setState((state) => ({ ...state, currentUser: { id: '123', email: state.loginPage.email } }));
+		setState((state) => ({ ...state, currentUser: { id: '123', email: state.signinPage.email } }));
 	}
 
 	async function signout() {
 		window.location.href = '/';
 	}
 
-	function changeLoginDetail(state: State, payload: { key: string; value: string }): State {
-		const loginPage = { ...state.loginPage, [payload.key]: payload.value };
-		return { ...state, loginPage };
+	function changeSigninDetail(state: State, payload: { key: string; value: string }): State {
+		const signinPage = { ...state.signinPage, [payload.key]: payload.value };
+		return { ...state, signinPage };
 	}
 
 	return {
 		initialize,
-		signin, signout, changeLoginDetail,
+		signin, signout, changeSigninDetail,
 	};
 };
 

@@ -8,7 +8,7 @@ interface Props {
 	email: string;
 	password: string;
 
-	changeLoginDetail: { (payload: { key: string; value: string }): void };
+	changeSigninDetail: { (payload: { key: string; value: string }): void };
 	signin: { (): void };
 }
 
@@ -20,7 +20,7 @@ const Signin = (props: Props) => (
 					<Input
 						autoFocus={props.email === ''}
 						value={props.email}
-						onChange={evt => props.changeLoginDetail({ key: 'email', value: evt.target.value })}
+						onChange={evt => props.changeSigninDetail({ key: 'email', value: evt.target.value })}
 						prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
 						placeholder="Email"
 					/>
@@ -30,7 +30,7 @@ const Signin = (props: Props) => (
 						type="password"
 						autoFocus={props.email.length > 0 && props.password === ''}
 						value={props.password}
-						onChange={evt => props.changeLoginDetail({ key: 'password', value: evt.target.value })}
+						onChange={evt => props.changeSigninDetail({ key: 'password', value: evt.target.value })}
 						prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
 						placeholder="Password"
 					/>
@@ -43,5 +43,5 @@ const Signin = (props: Props) => (
 	</div>
 );
 
-const mapToProps = ({ starting, loginPage }: any) => ({ starting, ...loginPage });
+const mapToProps = ({ starting, signinPage }: any) => ({ starting, ...signinPage });
 export default connect(mapToProps, actions)(Signin);
