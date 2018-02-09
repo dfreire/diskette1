@@ -54,14 +54,14 @@ interface Props {
 }
 
 interface State {
-	collapsedSideBar: boolean;
+	collapsedSidebar: boolean;
 }
 
 class App extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			collapsedSideBar: false,
+			collapsedSidebar: false,
 		};
 	}
 
@@ -75,14 +75,14 @@ class App extends React.Component<Props, State> {
 		return starting === false && (
 			<Router history={customHistory}>
 				{currentUser.id != null && currentUser.id.length > 0
-					? this._renderSignedIn()
-					: this._renderSignedOut()
+					? this._renderSignedin()
+					: this._renderSignedout()
 				}
 			</Router>
 		);
 	}
 
-	_renderSignedOut() {
+	_renderSignedout() {
 		return (
 			<AntLayout style={{ height: '100%' }}>
 				<Switch>
@@ -93,10 +93,10 @@ class App extends React.Component<Props, State> {
 		);
 	}
 
-	_renderSignedIn() {
+	_renderSignedin() {
 		return (
 			<AntLayout style={{ height: '100%' }}>
-				{this._renderSideBar()}
+				{this._renderSidebar()}
 				<AntLayout style={{ height: '100%' }}>
 					{this._renderHeader()}
 					{this._renderBreadcrumb()}
@@ -112,14 +112,14 @@ class App extends React.Component<Props, State> {
 		);
 	}
 
-	_renderSideBar() {
-		const sidebarState = this.state.collapsedSideBar ? 'collapsed' : 'expanded';
+	_renderSidebar() {
+		const sidebarState = this.state.collapsedSidebar ? 'collapsed' : 'expanded';
 
 		return (
 			<Sider
 				trigger={null}
 				collapsible={true}
-				collapsed={this.state.collapsedSideBar}
+				collapsed={this.state.collapsedSidebar}
 				style={{ height: '100%' }}
 				width={240}
 			>
@@ -170,8 +170,8 @@ class App extends React.Component<Props, State> {
 					<Col span={12}>
 						<Icon
 							className="trigger"
-							type={this.state.collapsedSideBar ? 'menu-unfold' : 'menu-fold'}
-							onClick={this._onToggleSideBar}
+							type={this.state.collapsedSidebar ? 'menu-unfold' : 'menu-fold'}
+							onClick={this._onToggleSidebar}
 							style={{ margin: '24px 20px', fontSize: 20, cursor: 'pointer' }}
 						/>
 					</Col>
@@ -214,9 +214,9 @@ class App extends React.Component<Props, State> {
 		);
 	}
 
-	_onToggleSideBar = () => {
+	_onToggleSidebar = () => {
 		this.setState({
-			collapsedSideBar: !this.state.collapsedSideBar,
+			collapsedSidebar: !this.state.collapsedSidebar,
 		});
 	}
 }
