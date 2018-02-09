@@ -21,8 +21,8 @@ import BackendEmails from './signedin/BackendEmails';
 import BackendSettings from './signedin/BackendSettings';
 
 const pageGroups = [
-	{ key: 'frontend', title: 'Frontend', icon: 'laptop' },
-	{ key: 'backend', title: 'Backend', icon: 'desktop' },
+	{ key: 'frontend', title: 'A:\\>', icon: 'laptop' },
+	{ key: 'backend', title: 'B:\\>', icon: 'desktop' },
 ];
 
 const pageGroupByKey = _.indexBy(pageGroups, 'key');
@@ -30,17 +30,17 @@ const pageGroupByKey = _.indexBy(pageGroups, 'key');
 const homePage = { key: 'home', title: 'Home', component: Home };
 
 const pages = [
-	{ key: 'pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file', component: FrontendPages },
-	{ key: 'models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: FrontendModels },
-	{ key: 'files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd', component: FrontendFiles },
-	{ key: 'collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table', component: FrontendCollections },
-	{ key: 'fusers', group: pageGroupByKey.frontend, title: 'Users', icon: 'team', component: FrontendUsers },
-	{ key: 'femails', group: pageGroupByKey.frontend, title: 'Emails', icon: 'mail', component: FrontendEmails },
-	{ key: 'translations', group: pageGroupByKey.frontend, title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
-	{ key: 'fsettings', group: pageGroupByKey.frontend, title: 'Settings', icon: 'setting', component: FrontendSettings },
-	{ key: 'busers', group: pageGroupByKey.backend, title: 'Users', icon: 'team', component: BackendUsers },
-	{ key: 'bemails', group: pageGroupByKey.backend, title: 'Emails', icon: 'mail', component: BackendEmails },
-	{ key: 'bsettings', group: pageGroupByKey.backend, title: 'Settings', icon: 'setting', component: BackendSettings },
+	{ key: 'a_pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file', component: FrontendPages },
+	{ key: 'a_models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: FrontendModels },
+	{ key: 'a_files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd', component: FrontendFiles },
+	{ key: 'a_collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table', component: FrontendCollections },
+	{ key: 'a_users', group: pageGroupByKey.frontend, title: 'Users', icon: 'team', component: FrontendUsers },
+	{ key: 'a_emails', group: pageGroupByKey.frontend, title: 'Emails', icon: 'mail', component: FrontendEmails },
+	{ key: 'a_translations', group: pageGroupByKey.frontend, title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
+	{ key: 'a_settings', group: pageGroupByKey.frontend, title: 'Settings', icon: 'setting', component: FrontendSettings },
+	{ key: 'b_users', group: pageGroupByKey.backend, title: 'Users', icon: 'team', component: BackendUsers },
+	{ key: 'b_emails', group: pageGroupByKey.backend, title: 'Emails', icon: 'mail', component: BackendEmails },
+	{ key: 'b_settings', group: pageGroupByKey.backend, title: 'Settings', icon: 'setting', component: BackendSettings },
 ];
 
 const pagesByKey = _.indexBy(pages, 'key');
@@ -185,10 +185,11 @@ class App extends React.Component<Props, State> {
 	}
 
 	_renderBreadcrumb() {
+		console.log('this.props.pathname', this.props.pathname);
 		return (
 			<Breadcrumb style={{ marginTop: 20, marginLeft: 20 }}>
 				<Breadcrumb.Item key={homePage.key}>
-					<Link to={'/'}>{homePage.title}</Link>
+					<Link to={`/${homePage.key}`}>{homePage.title}</Link>
 				</Breadcrumb.Item>
 				{this.props.pathname
 					.split('/')
@@ -197,7 +198,7 @@ class App extends React.Component<Props, State> {
 						const url = this.props.pathname.split(token)[0] + token;
 						const page = pagesByKey[token];
 						const title = page != null
-							? `${page.group.title} ${page.title}`
+							? page.title
 							: this.props.pathname.split(token)[0] + token;
 						return (
 							<Breadcrumb.Item key={i}>
