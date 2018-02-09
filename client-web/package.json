@@ -10,7 +10,8 @@
 		"react-router": "^4.2.0",
 		"react-router-dom": "^4.2.2",
 		"react-scripts-ts": "2.13.0",
-		"redux-zero": "^4.10.1"
+		"redux-zero": "^4.10.1",
+		"underscore": "^1.8.3"
 	},
 	"scripts": {
 		"start": "react-scripts-ts start",
@@ -26,6 +27,7 @@
 		"@types/react-dom": "^16.0.3",
 		"@types/react-router": "^4.0.21",
 		"@types/react-router-dom": "^4.2.3",
+		"@types/underscore": "^1.8.7",
 		"typescript": "^2.7.1"
 	}
 }

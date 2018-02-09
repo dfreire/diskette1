@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import { Layout as AntLayout, Row, Col, Menu, Icon, Breadcrumb } from 'antd';
 const { Header, Sider, Content } = AntLayout;
@@ -7,6 +8,51 @@ import { store, actions, customHistory } from './logic';
 import { User } from './model';
 import Signin from './signedout/Signin';
 import Home from './signedin/Home';
+import FrontendPages from './signedin/FrontendPages';
+import FrontendModels from './signedin/FrontendModels';
+import FrontendFiles from './signedin/FrontendFiles';
+import FrontendCollections from './signedin/FrontendCollections';
+import FrontendUsers from './signedin/FrontendUsers';
+import FrontendEmails from './signedin/FrontendEmails';
+import FrontendTranslations from './signedin/FrontendTranslations';
+import FrontendSettings from './signedin/FrontendSettings';
+import BackendUsers from './signedin/BackendUsers';
+import BackendEmails from './signedin/BackendEmails';
+import BackendSettings from './signedin/BackendSettings';
+
+const pages = [
+	{ key: 'home', title: 'Home', icon: '', component: Home },
+	{ key: 'pages', title: 'Pages', icon: 'file', component: FrontendPages },
+	{ key: 'models', title: 'Models', icon: 'file-text', component: FrontendModels },
+	{ key: 'files', title: 'Files', icon: 'hdd', component: FrontendFiles },
+	{ key: 'collections', title: 'Collections', icon: 'table', component: FrontendCollections },
+	{ key: 'fusers', title: 'Users', icon: 'team', component: FrontendUsers },
+	{ key: 'femails', title: 'Emails', icon: 'mail', component: FrontendEmails },
+	{ key: 'translations', title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
+	{ key: 'fsettings', title: 'Settings', icon: 'setting', component: FrontendSettings },
+	{ key: 'busers', title: 'Users', icon: 'team', component: BackendUsers },
+	{ key: 'bemails', title: 'Emails', icon: 'mail', component: BackendEmails },
+	{ key: 'bsettings', title: 'Settings', icon: 'setting', component: BackendSettings },
+];
+
+const pagesByKey = _.indexBy(pages, 'key');
+
+const frontendPages = [
+	pagesByKey.pages,
+	pagesByKey.models,
+	pagesByKey.files,
+	pagesByKey.collections,
+	pagesByKey.fusers,
+	pagesByKey.femails,
+	pagesByKey.translations,
+	pagesByKey.fsettings,
+];
+
+const backendPages = [
+	pagesByKey.busers,
+	pagesByKey.bemails,
+	pagesByKey.bsettings,
+];
 
 interface Props {
 	starting: boolean;
@@ -65,8 +111,8 @@ class App extends React.Component<Props, State> {
 					{this._renderBreadcrumb()}
 					<Content style={{ margin: 20, padding: 20, background: '#fff' }}>
 						<Switch>
-							<Route path="/home" exact={true} component={Home} />
-							<Route component={() => <Redirect to="/home" />} />
+							{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={p.component} />)}
+							<Route component={() => <Redirect to={`/${pagesByKey.home.key}`} />} />
 						</Switch>
 					</Content>
 				</AntLayout>
@@ -85,7 +131,7 @@ class App extends React.Component<Props, State> {
 				style={{ height: '100%' }}
 				width={240}
 			>
-				<Link to="/">
+				<Link to={`/${pagesByKey.home.key}/`}>
 					<div style={styles.logoContainer[sidebarState]}>
 						<img
 							style={styles.logoImg[sidebarState]}
@@ -98,83 +144,27 @@ class App extends React.Component<Props, State> {
 					theme="dark"
 					mode="inline"
 					selectedKeys={[this.props.pathname.split('/')[1]]}
-					defaultOpenKeys={['sub1', 'sub2']}
+					defaultOpenKeys={['frontend', 'backend']}
 				>
-					<Menu.SubMenu
-						key="sub1"
-						title={<span><Icon type="laptop" /><span>Frontend</span></span>}
-					>
-						<Menu.Item key="frontendsettings">
-							<Link to="/frontendsettings/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="setting" /></span>
-								<span style={styles.navText[sidebarState]}>Settings</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="pages">
-							<Link to="/pages/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="file" /></span>
-								<span style={styles.navText[sidebarState]}>Pages</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="models">
-							<Link to="/models/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="file-text" /></span>
-								<span style={styles.navText[sidebarState]}>Models</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="files">
-							<Link to="/files/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="hdd" /></span>
-								<span style={styles.navText[sidebarState]}>Files</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="collections">
-							<Link to="/collections/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="table" /></span>
-								<span style={styles.navText[sidebarState]}>Collections</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="frontendusers">
-							<Link to="/frontendusers/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="team" /></span>
-								<span style={styles.navText[sidebarState]}>Users</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="frontendemails">
-							<Link to="/frontendemails/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="mail" /></span>
-								<span style={styles.navText[sidebarState]}>Emails</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="translations">
-							<Link to="/translations/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="customer-service" /></span>
-								<span style={styles.navText[sidebarState]}>Translations</span>
-							</Link>
-						</Menu.Item>
+					<Menu.SubMenu key="frontend" title={<span><Icon type="laptop" /><span>Frontend</span></span>}>
+						{frontendPages.map(p => (
+							<Menu.Item key={p.key}>
+								<Link to={`/${p.key}/`}>
+									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
+									<span style={styles.navText[sidebarState]}>{p.title}</span>
+								</Link>
+							</Menu.Item>
+						))}
 					</Menu.SubMenu>
-					<Menu.SubMenu
-						key="sub2"
-						title={<span><Icon type="desktop" /><span>Backend</span></span>}
-					>
-						<Menu.Item key="backendsettings">
-							<Link to="/backendsettings/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="setting" /></span>
-								<span style={styles.navText[sidebarState]}>Settings</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="backendusers">
-							<Link to="/backendusers/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="team" /></span>
-								<span style={styles.navText[sidebarState]}>Users</span>
-							</Link>
-						</Menu.Item>
-						<Menu.Item key="backendemails">
-							<Link to="/backendemails/">
-								<span style={styles.navIcon[sidebarState]}><Icon type="mail" /></span>
-								<span style={styles.navText[sidebarState]}>Emails</span>
-							</Link>
-						</Menu.Item>
+					<Menu.SubMenu key="backend" title={<span><Icon type="desktop" /><span>Backend</span></span>}>
+						{backendPages.map(p => (
+							<Menu.Item key={p.key}>
+								<Link to={`/${p.key}/`}>
+									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
+									<span style={styles.navText[sidebarState]}>{p.title}</span>
+								</Link>
+							</Menu.Item>
+						))}
 					</Menu.SubMenu>
 				</Menu>
 			</Sider>
@@ -248,17 +238,14 @@ const styles = {
 	},
 	logoImg: {
 		expanded: {
-			// width: '100%',
 			height: 40,
 		},
 		collapsed: {
-			// width: '100%',
 			height: 40,
 		},
 	},
 	navIcon: {
 		expanded: {
-			// display: 'none',
 		},
 		collapsed: {
 			textAlign: 'center',
