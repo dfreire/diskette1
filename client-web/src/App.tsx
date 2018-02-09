@@ -101,11 +101,7 @@ class App extends React.Component<Props, State> {
 					{this._renderHeader()}
 					{this._renderBreadcrumb()}
 					<Content style={{ margin: 20, padding: 20, background: '#fff' }}>
-						<Switch>
-							<Route key={homePage.key} path={`/${homePage.key}`} exact={true} component={homePage.component} />
-							{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={p.component} />)}
-							<Route component={() => <Redirect to={`/${homePage.key}/`} />} />
-						</Switch>
+						{this._renderRoutes()}
 					</Content>
 				</AntLayout>
 			</AntLayout>
@@ -141,7 +137,7 @@ class App extends React.Component<Props, State> {
 					<Menu.SubMenu key={pageGroupByKey.frontend.key} title={<span><Icon type={pageGroupByKey.frontend.icon} /><span>{pageGroupByKey.frontend.title}</span></span>}>
 						{pages.filter(p => p.group === pageGroupByKey.frontend).map(p => (
 							<Menu.Item key={p.key}>
-								<Link to={`/${p.key}/`}>
+								<Link to={`/${p.key}`}>
 									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
 									<span style={styles.navText[sidebarState]}>{p.title}</span>
 								</Link>
@@ -151,7 +147,7 @@ class App extends React.Component<Props, State> {
 					<Menu.SubMenu key={pageGroupByKey.backend.key} title={<span><Icon type={pageGroupByKey.backend.icon} /><span>{pageGroupByKey.backend.title}</span></span>}>
 						{pages.filter(p => p.group === pageGroupByKey.backend).map(p => (
 							<Menu.Item key={p.key}>
-								<Link to={`/${p.key}/`}>
+								<Link to={`/${p.key}`}>
 									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
 									<span style={styles.navText[sidebarState]}>{p.title}</span>
 								</Link>
@@ -211,6 +207,16 @@ class App extends React.Component<Props, State> {
 					})
 				}
 			</Breadcrumb>
+		);
+	}
+
+	_renderRoutes() {
+		return (
+			<Switch>
+				<Route key={homePage.key} path={`/${homePage.key}`} exact={true} component={homePage.component} />
+				{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={p.component} />)}
+				<Route component={() => <Redirect to={`/${homePage.key}`} />} />
+			</Switch>
 		);
 	}
 
