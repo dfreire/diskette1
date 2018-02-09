@@ -20,39 +20,30 @@ import BackendUsers from './signedin/BackendUsers';
 import BackendEmails from './signedin/BackendEmails';
 import BackendSettings from './signedin/BackendSettings';
 
+const pageGroups = [
+	{ key: 'frontend', title: 'Frontend', icon: 'laptop' },
+	{ key: 'backend', title: 'Backend', icon: 'desktop' },
+];
+
+const pageGroupByKey = _.indexBy(pageGroups, 'key');
+
+const homePage = { key: 'home', title: 'Home', component: Home };
+
 const pages = [
-	{ key: 'home', title: 'Home', icon: '', component: Home },
-	{ key: 'pages', title: 'Pages', icon: 'file', component: FrontendPages },
-	{ key: 'models', title: 'Models', icon: 'file-text', component: FrontendModels },
-	{ key: 'files', title: 'Files', icon: 'hdd', component: FrontendFiles },
-	{ key: 'collections', title: 'Collections', icon: 'table', component: FrontendCollections },
-	{ key: 'fusers', title: 'Users', icon: 'team', component: FrontendUsers },
-	{ key: 'femails', title: 'Emails', icon: 'mail', component: FrontendEmails },
-	{ key: 'translations', title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
-	{ key: 'fsettings', title: 'Settings', icon: 'setting', component: FrontendSettings },
-	{ key: 'busers', title: 'Users', icon: 'team', component: BackendUsers },
-	{ key: 'bemails', title: 'Emails', icon: 'mail', component: BackendEmails },
-	{ key: 'bsettings', title: 'Settings', icon: 'setting', component: BackendSettings },
+	{ key: 'pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file', component: FrontendPages },
+	{ key: 'models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: FrontendModels },
+	{ key: 'files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd', component: FrontendFiles },
+	{ key: 'collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table', component: FrontendCollections },
+	{ key: 'fusers', group: pageGroupByKey.frontend, title: 'Users', icon: 'team', component: FrontendUsers },
+	{ key: 'femails', group: pageGroupByKey.frontend, title: 'Emails', icon: 'mail', component: FrontendEmails },
+	{ key: 'translations', group: pageGroupByKey.frontend, title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
+	{ key: 'fsettings', group: pageGroupByKey.frontend, title: 'Settings', icon: 'setting', component: FrontendSettings },
+	{ key: 'busers', group: pageGroupByKey.backend, title: 'Users', icon: 'team', component: BackendUsers },
+	{ key: 'bemails', group: pageGroupByKey.backend, title: 'Emails', icon: 'mail', component: BackendEmails },
+	{ key: 'bsettings', group: pageGroupByKey.backend, title: 'Settings', icon: 'setting', component: BackendSettings },
 ];
 
 const pagesByKey = _.indexBy(pages, 'key');
-
-const frontendPages = [
-	pagesByKey.pages,
-	pagesByKey.models,
-	pagesByKey.files,
-	pagesByKey.collections,
-	pagesByKey.fusers,
-	pagesByKey.femails,
-	pagesByKey.translations,
-	pagesByKey.fsettings,
-];
-
-const backendPages = [
-	pagesByKey.busers,
-	pagesByKey.bemails,
-	pagesByKey.bsettings,
-];
 
 interface Props {
 	starting: boolean;
@@ -111,8 +102,9 @@ class App extends React.Component<Props, State> {
 					{this._renderBreadcrumb()}
 					<Content style={{ margin: 20, padding: 20, background: '#fff' }}>
 						<Switch>
+							<Route key={homePage.key} path={`/${homePage.key}`} exact={true} component={homePage.component} />
 							{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={p.component} />)}
-							<Route component={() => <Redirect to={`/${pagesByKey.home.key}`} />} />
+							<Route component={() => <Redirect to={`/${homePage.key}/`} />} />
 						</Switch>
 					</Content>
 				</AntLayout>
@@ -131,7 +123,7 @@ class App extends React.Component<Props, State> {
 				style={{ height: '100%' }}
 				width={240}
 			>
-				<Link to={`/${pagesByKey.home.key}/`}>
+				<Link to={`/${homePage.key}/`}>
 					<div style={styles.logoContainer[sidebarState]}>
 						<img
 							style={styles.logoImg[sidebarState]}
@@ -144,10 +136,10 @@ class App extends React.Component<Props, State> {
 					theme="dark"
 					mode="inline"
 					selectedKeys={[this.props.pathname.split('/')[1]]}
-					defaultOpenKeys={['frontend', 'backend']}
+					defaultOpenKeys={[pageGroupByKey.frontend.key, pageGroupByKey.backend.key]}
 				>
-					<Menu.SubMenu key="frontend" title={<span><Icon type="laptop" /><span>Frontend</span></span>}>
-						{frontendPages.map(p => (
+					<Menu.SubMenu key={pageGroupByKey.frontend.key} title={<span><Icon type={pageGroupByKey.frontend.icon} /><span>{pageGroupByKey.frontend.title}</span></span>}>
+						{pages.filter(p => p.group === pageGroupByKey.frontend).map(p => (
 							<Menu.Item key={p.key}>
 								<Link to={`/${p.key}/`}>
 									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
@@ -156,8 +148,8 @@ class App extends React.Component<Props, State> {
 							</Menu.Item>
 						))}
 					</Menu.SubMenu>
-					<Menu.SubMenu key="backend" title={<span><Icon type="desktop" /><span>Backend</span></span>}>
-						{backendPages.map(p => (
+					<Menu.SubMenu key={pageGroupByKey.backend.key} title={<span><Icon type={pageGroupByKey.backend.icon} /><span>{pageGroupByKey.backend.title}</span></span>}>
+						{pages.filter(p => p.group === pageGroupByKey.backend).map(p => (
 							<Menu.Item key={p.key}>
 								<Link to={`/${p.key}/`}>
 									<span style={styles.navIcon[sidebarState]}><Icon type={p.icon} /></span>
@@ -199,17 +191,21 @@ class App extends React.Component<Props, State> {
 	_renderBreadcrumb() {
 		return (
 			<Breadcrumb style={{ marginTop: 20, marginLeft: 20 }}>
-				<Breadcrumb.Item key={'home'}>
-					<Link to={'/'}>home</Link>
+				<Breadcrumb.Item key={homePage.key}>
+					<Link to={'/'}>{homePage.title}</Link>
 				</Breadcrumb.Item>
 				{this.props.pathname
 					.split('/')
-					.filter(item => item.length > 0 && item !== 'home')
-					.map((item, i) => {
-						const url = this.props.pathname.split(item)[0] + item;
+					.filter(token => token.length > 0 && token !== homePage.key)
+					.map((token, i) => {
+						const url = this.props.pathname.split(token)[0] + token;
+						const page = pagesByKey[token];
+						const title = page != null
+							? `${page.group.title} ${page.title}`
+							: this.props.pathname.split(token)[0] + token;
 						return (
 							<Breadcrumb.Item key={i}>
-								<Link to={url}>{item}</Link>
+								<Link to={url}>{title}</Link>
 							</Breadcrumb.Item>
 						);
 					})
