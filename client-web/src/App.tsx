@@ -185,7 +185,6 @@ class App extends React.Component<Props, State> {
 	}
 
 	_renderBreadcrumb() {
-		console.log('this.props.pathname', this.props.pathname);
 		return (
 			<Breadcrumb style={{ marginTop: 20, marginLeft: 20 }}>
 				<Breadcrumb.Item key={homePage.key}>
