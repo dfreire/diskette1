@@ -231,11 +231,11 @@ const styles = {
 	logoContainer: {
 		expanded: {
 			backgroundColor: '#072449',
-			padding: 20,
+			padding: '30px 20px',
 		},
 		collapsed: {
 			backgroundColor: '#072449',
-			padding: 20,
+			padding: '30px 20px',
 		},
 	},
 	logoImg: {
