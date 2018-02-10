@@ -10,6 +10,7 @@ export interface Page {
 	metaDescription: string;
 	metaKeywords: string;
 	slug: string;
+	status: 'draft' | 'final';
 	pageIds: string[];
 	redirectToId?: string;
 }
@@ -80,6 +81,7 @@ export interface OptionsField extends SelectField {
 
 export interface CollectionField extends SelectField {
 	type: 'collection';
+	collectionName: string;
 	keyField: string;
 	titleField: string;
 	valueField: string;
