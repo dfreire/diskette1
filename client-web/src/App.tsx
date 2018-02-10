@@ -5,7 +5,7 @@ const { Header, Sider, Content } = AntLayout;
 import { Router, Route, Redirect, Switch, Link } from 'react-router-dom';
 import { Provider, connect } from 'redux-zero/react';
 import { store, actions, customHistory } from './logic';
-import { User } from './model';
+import { User } from './types';
 import Signin from './signedout/Signin';
 import Home from './signedin/Home';
 import FrontendPages from './signedin/FrontendPages';

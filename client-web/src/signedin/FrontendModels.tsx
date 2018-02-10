@@ -1,19 +1,36 @@
 import * as React from 'react';
+import { Table, Button } from 'antd';
 import { connect } from 'redux-zero/react';
 import { actions } from '../logic';
-import { User } from '../model';
+import { User, Model } from '../types';
+
+const columns = [{
+	title: 'Name',
+	dataIndex: 'name',
+}];
 
 interface Props {
 	starting: boolean;
 	currentUser: User;
+	records: Model[];
 }
 
 const FrontendModels = (props: Props) => (
 	<div>
-		<h1>FrontendModels</h1>
-		{props.currentUser.email}
+		<h1>Page Models</h1>
+		<Table style={styles.table} dataSource={props.records} columns={columns} />
+		<Button style={styles.button} type="primary">New</Button>
 	</div>
 );
 
-const mapToProps = ({ starting, currentUser }: any) => ({ starting, currentUser });
+const styles = {
+	table: {
+		marginBottom: 10,
+	},
+	button: {
+		width: 100,
+	},
+};
+
+const mapToProps = ({ starting, currentUser, modelListPage }: any) => ({ starting, currentUser, ...modelListPage });
 export default connect(mapToProps, actions)(FrontendModels);

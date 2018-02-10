@@ -1,3 +1,17 @@
+export const DisketteType = {
+	User: 'DsktUser',
+	Page: 'DsktPage',
+	PageModel: 'DsktPageModel',
+	File: 'DsktFile',
+	Collection: 'DsktCollection',
+	CollectionModel: 'DsktCollectionModel',
+	Translation: 'DsktTranslation',
+};
+
+export interface Record {
+	id: string;
+}
+
 export interface User {
 	id: string;
 	email: string;
@@ -15,9 +29,9 @@ export interface Page {
 	redirectToId?: string;
 }
 
-export interface PageModel {
+export interface Model {
 	id: string;
-	title: string;
+	name: string;
 	fields: Field[];
 }
 

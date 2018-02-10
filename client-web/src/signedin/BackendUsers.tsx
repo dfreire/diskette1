@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'redux-zero/react';
 import { actions } from '../logic';
-import { User } from '../model';
+import { User } from '../types';
 
 interface Props {
 	starting: boolean;
