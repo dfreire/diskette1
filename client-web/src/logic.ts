@@ -37,14 +37,14 @@ interface StoreSignature {
 	setState: { (callback: { (state: State): State }): void };
 }
 
-const actions = ({ getState, setState }: StoreSignature) => {
+const createActions = ({ getState, setState }: StoreSignature) => {
 	async function initialize(_state: State) {
 		customHistory.listen((location: Location, action: Action) => {
 			setState((state) => ({ ...state, pathname: location.pathname }));
 		});
 
 		const email = await localStorage.getItem('signinPage.email');
-		
+
 		setState((state) => {
 			const signinPage = { ...state.signinPage, email: email || '' };
 			return { ...state, signinPage, starting: false };
@@ -56,7 +56,7 @@ const actions = ({ getState, setState }: StoreSignature) => {
 		if (_state.signinPage.email == null || _state.signinPage.email.trim().length === 0) {
 			errors.email = 'Required!';
 		}
-		
+
 		if (_state.signinPage.password == null || _state.signinPage.password.trim().length === 0) {
 			errors.password = 'Required!';
 		}
@@ -86,6 +86,14 @@ const actions = ({ getState, setState }: StoreSignature) => {
 		initialize,
 		signin, signout, changeSigninDetail,
 	};
+};
+
+let _actions: any;
+const actions = ({ getState, setState }: StoreSignature) => {
+	if (_actions == null) {
+		_actions = createActions({ getState, setState });
+	}
+	return _actions;
 };
 
 export { store, actions, customHistory };
