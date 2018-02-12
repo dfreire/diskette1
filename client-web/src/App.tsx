@@ -9,7 +9,7 @@ import { User } from './types';
 import Signin from './signedout/Signin';
 import Home from './signedin/Home';
 import FrontendPages from './signedin/FrontendPages';
-import FrontendModels from './signedin/FrontendModels';
+import RecordList from './signedin/RecordList';
 import FrontendFiles from './signedin/FrontendFiles';
 import FrontendCollections from './signedin/FrontendCollections';
 import FrontendUsers from './signedin/FrontendUsers';
@@ -31,7 +31,7 @@ const homePage = { key: 'home', title: 'Home', component: Home };
 
 const pages = [
 	{ key: 'a_pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file', component: FrontendPages },
-	{ key: 'a_models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: FrontendModels },
+	{ key: 'a_models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: RecordList },
 	{ key: 'a_files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd', component: FrontendFiles },
 	{ key: 'a_collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table', component: FrontendCollections },
 	{ key: 'a_users', group: pageGroupByKey.frontend, title: 'Users', icon: 'team', component: FrontendUsers },
