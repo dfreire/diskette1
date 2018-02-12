@@ -7,7 +7,9 @@ import { User, Record } from '../types';
 interface Props {
 	starting: boolean;
 	currentUser: User;
+	title: string;
 	records: Record[];
+	onEnterRecordList: { (): void };
 }
 
 const columns = [{
@@ -15,13 +17,27 @@ const columns = [{
 	dataIndex: 'name',
 }];
 
-const RecordList = (props: Props) => (
-	<div>
-		<h1>RecordList</h1>
-		<Table style={styles.table} dataSource={props.records} columns={columns} />
-		<Button style={styles.button} type="primary">New</Button>
-	</div>
-);
+class RecordList extends React.Component<Props, {}> {
+	constructor(props: Props) {
+		super(props);
+	}
+
+	componentWillMount() {
+		this.props.onEnterRecordList();
+	}
+
+	render() {
+		const { title, records } = this.props;
+
+		return (
+			<div>
+				<h1>{title}</h1>
+				<Table style={styles.table} dataSource={records} columns={columns} />
+				<Button style={styles.button} type="primary">New</Button>
+			</div>
+		);
+	}
+}
 
 const styles = {
 	table: {
@@ -32,5 +48,5 @@ const styles = {
 	},
 };
 
-const mapToProps = ({ starting, currentUser, recordListPage }: any) => ({ starting, currentUser, ...recordListPage });
+const mapToProps = ({ starting, currentUser, title, recordListPage }: any) => ({ starting, currentUser, title, ...recordListPage });
 export default connect(mapToProps, actions)(RecordList);

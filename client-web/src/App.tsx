@@ -1,10 +1,9 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import { Layout as AntLayout, Row, Col, Menu, Icon, Breadcrumb } from 'antd';
 const { Header, Sider, Content } = AntLayout;
 import { Router, Route, Redirect, Switch, Link } from 'react-router-dom';
 import { Provider, connect } from 'redux-zero/react';
-import { store, actions, customHistory } from './logic';
+import { store, actions, customHistory, pageGroupByKey, homePage, pages, pagesByKey } from './logic';
 import { User } from './types';
 import Signin from './signedout/Signin';
 import Home from './signedin/Home';
@@ -20,30 +19,19 @@ import BackendUsers from './signedin/BackendUsers';
 import BackendEmails from './signedin/BackendEmails';
 import BackendSettings from './signedin/BackendSettings';
 
-const pageGroups = [
-	{ key: 'frontend', title: 'A:\\>', icon: 'laptop' },
-	{ key: 'backend', title: 'B:\\>', icon: 'desktop' },
-];
-
-const pageGroupByKey = _.indexBy(pageGroups, 'key');
-
-const homePage = { key: 'home', title: 'Home', component: Home };
-
-const pages = [
-	{ key: 'a_pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file', component: FrontendPages },
-	{ key: 'a_models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text', component: RecordList },
-	{ key: 'a_files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd', component: FrontendFiles },
-	{ key: 'a_collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table', component: FrontendCollections },
-	{ key: 'a_users', group: pageGroupByKey.frontend, title: 'Users', icon: 'team', component: FrontendUsers },
-	{ key: 'a_emails', group: pageGroupByKey.frontend, title: 'Emails', icon: 'mail', component: FrontendEmails },
-	{ key: 'a_translations', group: pageGroupByKey.frontend, title: 'Translations', icon: 'customer-service', component: FrontendTranslations },
-	{ key: 'a_settings', group: pageGroupByKey.frontend, title: 'Settings', icon: 'setting', component: FrontendSettings },
-	{ key: 'b_users', group: pageGroupByKey.backend, title: 'Users', icon: 'team', component: BackendUsers },
-	{ key: 'b_emails', group: pageGroupByKey.backend, title: 'Emails', icon: 'mail', component: BackendEmails },
-	{ key: 'b_settings', group: pageGroupByKey.backend, title: 'Settings', icon: 'setting', component: BackendSettings },
-];
-
-const pagesByKey = _.indexBy(pages, 'key');
+const componentByPageKey = {
+	[pagesByKey.a_pages.key]: FrontendPages,
+	[pagesByKey.a_models.key]: RecordList,
+	[pagesByKey.a_files.key]: FrontendFiles,
+	[pagesByKey.a_collections.key]: FrontendCollections,
+	[pagesByKey.a_users.key]: FrontendUsers,
+	[pagesByKey.a_emails.key]: FrontendEmails,
+	[pagesByKey.a_translations.key]: FrontendTranslations,
+	[pagesByKey.a_settings.key]: FrontendSettings,
+	[pagesByKey.b_users.key]: BackendUsers,
+	[pagesByKey.b_emails.key]: BackendEmails,
+	[pagesByKey.b_settings.key]: BackendSettings,
+};
 
 interface Props {
 	starting: boolean;
@@ -213,8 +201,8 @@ class App extends React.Component<Props, State> {
 	_renderRoutes() {
 		return (
 			<Switch>
-				<Route key={homePage.key} path={`/${homePage.key}`} exact={true} component={homePage.component} />
-				{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={p.component} />)}
+				<Route key={homePage.key} path={`/${homePage.key}`} exact={true} component={Home} />
+				{pages.map(p => <Route key={p.key} path={`/${p.key}`} exact={true} component={componentByPageKey[p.key]} />)}
 				<Route component={() => <Redirect to={`/${homePage.key}`} />} />
 			</Switch>
 		);

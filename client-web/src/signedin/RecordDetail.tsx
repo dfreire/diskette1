@@ -6,15 +6,27 @@ import { User, Record } from '../types';
 interface Props {
 	starting: boolean;
 	currentUser: User;
+	title: string;
 	record: Record;
+	onEnterRecordDetail: { (): void };
 }
 
-const RecordDetail = (props: Props) => (
-	<div>
-		<h1>RecordDetail</h1>
-		{JSON.stringify(props.record)}
-	</div>
-);
+class RecordDetail extends React.Component<Props, {}> {
+	componentWillMount() {
+		this.props.onEnterRecordDetail();
+	}
 
-const mapToProps = ({ starting, currentUser, recordDetailPage }: any) => ({ starting, currentUser, ...recordDetailPage });
+	render() {
+		const { title, record } = this.props;
+
+		return (
+			<div>
+				<h1>{title}</h1>
+				{JSON.stringify(record)}
+			</div>
+		);
+	}
+}
+
+const mapToProps = ({ starting, currentUser, title, recordDetailPage }: any) => ({ starting, currentUser, title, ...recordDetailPage });
 export default connect(mapToProps, actions)(RecordDetail);

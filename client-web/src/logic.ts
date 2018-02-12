@@ -1,9 +1,35 @@
+import * as _ from 'underscore';
 import createStore from 'redux-zero';
 import { Location, Action } from 'history';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { Record, User, Model } from './types';
 
 const customHistory = createBrowserHistory();
+
+const pageGroups = [
+	{ key: 'frontend', title: 'A:\\>', icon: 'laptop' },
+	{ key: 'backend', title: 'B:\\>', icon: 'desktop' },
+];
+
+const pageGroupByKey = _.indexBy(pageGroups, 'key');
+
+const homePage = { key: 'home', title: 'Home' };
+
+const pages = [
+	{ key: 'a_pages', group: pageGroupByKey.frontend, title: 'Pages', icon: 'file' },
+	{ key: 'a_models', group: pageGroupByKey.frontend, title: 'Models', icon: 'file-text' },
+	{ key: 'a_files', group: pageGroupByKey.frontend, title: 'Files', icon: 'hdd' },
+	{ key: 'a_collections', group: pageGroupByKey.frontend, title: 'Collections', icon: 'table' },
+	{ key: 'a_users', group: pageGroupByKey.frontend, title: 'Users', icon: 'team' },
+	{ key: 'a_emails', group: pageGroupByKey.frontend, title: 'Emails', icon: 'mail' },
+	{ key: 'a_translations', group: pageGroupByKey.frontend, title: 'Translations', icon: 'customer-service' },
+	{ key: 'a_settings', group: pageGroupByKey.frontend, title: 'Settings', icon: 'setting' },
+	{ key: 'b_users', group: pageGroupByKey.backend, title: 'Users', icon: 'team' },
+	{ key: 'b_emails', group: pageGroupByKey.backend, title: 'Emails', icon: 'mail' },
+	{ key: 'b_settings', group: pageGroupByKey.backend, title: 'Settings', icon: 'setting' },
+];
+
+const pagesByKey = _.indexBy(pages, 'key');
 
 interface State {
 	starting: boolean;
@@ -19,9 +45,11 @@ interface State {
 	};
 
 	recordListPage: {
+		title: string;
 		records: Record[];
 	};
 	recordDetailPage: {
+		title: string;
 		record: Record;
 		errors: { [key: string]: string };
 	};
@@ -44,9 +72,11 @@ const INITIAL_STATE: State = {
 	},
 
 	recordListPage: {
+		title: '',
 		records: [],
 	},
 	recordDetailPage: {
+		title: '',
 		record: {
 			id: '',
 		},
@@ -114,8 +144,18 @@ const createActions = ({ getState, setState }: StoreSignature) => {
 		return { ...state, signinPage };
 	}
 
-	async function openRecordDetail(_state: State, payload: { type: string; id?: string }) {
-		// const { type, id } = payload;
+	async function onEnterRecordList(_state: State) {
+		const { pathname } = _state;
+		const key = pathname.split('/')[1];
+		const { title } = pagesByKey[key];
+		const records = [] as Record[];
+		setState(state => ({ ...state, recordListPage: { title, records } }));
+	}
+
+	async function onEnterRecordDetail(_state: State) {
+		setState(state => state);
+		/*
+				// const { type, id } = payload;
 		// if (id == null || id === '') {
 		setState(state => ({
 			...state,
@@ -125,12 +165,13 @@ const createActions = ({ getState, setState }: StoreSignature) => {
 			},
 		}));
 		// }
+		*/
 	}
 
 	return {
 		initialize,
 		signin, signout, changeSigninDetail,
-		openRecordDetail,
+		onEnterRecordList, onEnterRecordDetail,
 	};
 };
 
@@ -142,4 +183,8 @@ const actions = ({ getState, setState }: StoreSignature) => {
 	return _actions;
 };
 
-export { store, actions, customHistory };
+export {
+	customHistory,
+	pageGroups, pageGroupByKey, homePage, pages, pagesByKey,
+	store, actions,
+};
