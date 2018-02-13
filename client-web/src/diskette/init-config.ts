@@ -1,5 +1,5 @@
 interface Config {
-	env: 'dev' | 'prod';
+	env: 'development' | 'production';
 }
 
 const isLocalhost = Boolean(
@@ -13,11 +13,11 @@ const isLocalhost = Boolean(
 );
 
 const createDevConfig = (): Config => ({
-	env: 'dev',
+	env: 'development',
 });
 
 const createProdConfig = (): Config => ({
-	env: 'prod',
+	env: 'production',
 });
 
 const config = isLocalhost ? createDevConfig() : createProdConfig();

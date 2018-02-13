@@ -1,3 +1,5 @@
+import 'antd/dist/antd.css';
+import './Root.css';
 import * as React from 'react';
 import { Layout as AntLayout, Row, Col, Menu, Icon, Breadcrumb } from 'antd';
 const { Header, Sider, Content } = AntLayout;

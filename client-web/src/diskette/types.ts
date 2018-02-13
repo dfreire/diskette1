@@ -1,3 +1,12 @@
+export interface App {
+	pageModels: Model[];
+	collectionModels: Model[];
+	hooks: Hook[];
+}
+
+export type Hook = { (hookType: Hook, model: Model, record: Record, gun: any): Promise<Record> };
+export type HookType = 'beforeCreate' | 'beforeUpdate' | 'beforeDelete' | 'afterCreate' | 'afterUpdate' | 'afterDelete';
+
 export const DisketteType = {
 	User: 'DsktUser',
 	Page: 'DsktPage',
@@ -19,7 +28,7 @@ export interface User {
 
 export interface Page {
 	id: string;
-	modelId: string;
+	modelName: string;
 	title: string;
 	metaDescription: string;
 	metaKeywords: string;
@@ -30,7 +39,6 @@ export interface Page {
 }
 
 export interface Model {
-	id: string;
 	name: string;
 	fields: Field[];
 }
